@@ -1,13 +1,5 @@
 language: cpp
 compiler: clang
-addons:
-  apt:
-    packages:
-      - doxygen
-      - doxygen-doc
-      - doxygen-latex
-      - doxygen-gui
-      - graphviz
 before_script:
   - echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq

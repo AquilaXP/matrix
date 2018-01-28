@@ -1,13 +1,13 @@
 #pragma once
 
 #include <map>
-#include <array>
 #include <tuple>
+#include <functional>
 
 namespace detail{
 
 //===========================================================/
-//  Шаблон для генерации tuple с N элементов одного типа     /         
+//  РЁР°Р±Р»РѕРЅ РґР»СЏ РіРµРЅРµСЂР°С†РёРё tuple СЃ N СЌР»РµРјРµРЅС‚РѕРІ РѕРґРЅРѕРіРѕ С‚РёРїР°     /
 //===========================================================/
 template <size_t I, class T, class... P>
 struct gen_tuple
@@ -25,21 +25,21 @@ template<class T, size_t I>
 using gen_tuple_t = typename gen_tuple<I, T>::type;
 //===========================================================/
 
-/// Тип индексов
+/// РўРёРї РёРЅРґРµРєСЃРѕРІ
 template<size_t Size>
 using index_t = gen_tuple_t<size_t, Size>;
 
-/// Тип контейенра для хранения разряженной матрицы
+/// РўРёРї РєРѕРЅС‚РµР№РµРЅСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЂР°Р·СЂСЏР¶РµРЅРЅРѕР№ РјР°С‚СЂРёС†С‹
 template<class Ty, size_t Size>
 using mat_t = std::map<gen_tuple_t<size_t, Size>, Ty>;
 
-/// Прокси-класс для работы со значением
+/// РџСЂРѕРєСЃРё-РєР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃРѕ Р·РЅР°С‡РµРЅРёРµРј
 template<class Ty, size_t N>
 class ProxyValue
 {
 public:
-    ProxyValue( mat_t<Ty, N >& data, index_t<N>& indices, const Ty& default )
-        : m_data( data ), m_indices( indices ), m_default( default )
+    ProxyValue( mat_t<Ty, N>& data, index_t<N>& indices, const Ty& default_value )
+        : m_data( data ), m_indices( indices ), m_default( default_value )
     {}
 
     ProxyValue& operator = ( const Ty& value )
@@ -75,13 +75,13 @@ private:
     index_t<N>& m_indices;
 };
 
-/// Прокси-класс для реализация N мерного оператора []
+/// РџСЂРѕРєСЃРё-РєР»Р°СЃСЃ РґР»СЏ СЂРµР°Р»РёР·Р°С†РёСЏ N РјРµСЂРЅРѕРіРѕ РѕРїРµСЂР°С‚РѕСЂР° []
 template<class Ty, size_t N, size_t I>
 class ProxyMatrix
 {
 public:
-    ProxyMatrix( mat_t<Ty, N>& data, index_t<N>& indices, const Ty& default )
-        : m_data( data ), m_indices( indices ), m_default( default )
+    ProxyMatrix( mat_t<Ty, N>& data, index_t<N>& indices, const Ty& default_value )
+        : m_data( data ), m_indices( indices ), m_default( default_value )
     {}
 
     auto operator[]( size_t index )
@@ -100,8 +100,8 @@ template<class Ty, size_t N>
 class ProxyMatrix<Ty, N, 1>
 {
 public:
-    ProxyMatrix( mat_t<Ty, N>& data, index_t<N>& indices, const Ty& default )
-        : m_data( data ), m_indices( indices ), m_default( default )
+    ProxyMatrix( mat_t<Ty, N>& data, index_t<N>& indices, const Ty& default_value )
+        : m_data( data ), m_indices( indices ), m_default( default_value )
     {}
 
     auto operator[]( size_t index )
@@ -118,7 +118,7 @@ private:
 
 } // namespace detail
 
-/// Итератор
+/// РС‚РµСЂР°С‚РѕСЂ
 template<class T, size_t N>
 struct iterator_matrix
 {
@@ -181,7 +181,7 @@ private:
     typename detail::mat_t<T, N>::iterator m_iter;
 };
 
-/// Класс матрицы
+/// РљР»Р°СЃСЃ РјР°С‚СЂРёС†С‹
 template<class Ty, size_t N = 2>
 class Matrix
 {
