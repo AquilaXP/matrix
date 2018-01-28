@@ -11,6 +11,7 @@ set(SRC
     )
 
 set(HDR
+    matrix.h
     )
 
 #Program matrix
