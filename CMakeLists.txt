@@ -25,7 +25,7 @@ set_target_properties(matrix PROPERTIES
 set_target_properties( matrix PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
-    #COMPILE_OPTIONS -Wall
+    COMPILE_OPTIONS -Wall
 )
 
 install(TARGETS matrix RUNTIME DESTINATION bin)
